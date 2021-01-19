@@ -11,6 +11,7 @@ class Page extends Component {
         }
         this.updateName = this.updateName.bind(this);
         this.addName = this.addName.bind(this);
+        this.deleteName = this.deleteName(this);
     }
 
     updateName(evnt) {
@@ -23,9 +24,14 @@ class Page extends Component {
         this.props.addItem(this.state.name);
         this.updateState();
     }
-    updateState()
-    {
-        this.setState({items:this.props.items})
+
+    deleteName = (name) => {
+        this.props.deleteItem(name);
+        this.updateState();
+    }
+
+    updateState() {
+        this.setState({items: this.props.items})
     }
 
     render() {
@@ -45,8 +51,10 @@ class Page extends Component {
                 <div>
                     <label>Names</label>
                     <ul>
-                        {this.state.items.map(function(item){
-                         return  <li key={item} onClick={this.props.deleteItem(item)}>{item}</li>
+                        {this.state.items.map((item) => {
+                            return <li key={item} onClick={() => {
+                                this.props.deleteItem(item);
+                            }}>{item}</li>
                         })}
                     </ul>
                 </div>
@@ -62,9 +70,10 @@ function mapDispatchToProps(dispatch) {
         deleteItem: item => dispatch(DeleteItem(item)),
     };
 }
+
 function mapStateToProps(state) {
     return {
-       items:state.items,
+        items: state.items,
     }
 }
 
